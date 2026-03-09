@@ -1,17 +1,18 @@
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+# Environment setup (NVM, cargo, bun, opencode) is in ~/.profile
+# which is sourced by ~/.bash_profile before this file.
+# Only set them here as fallback for non-login interactive shells.
+if [ -z "$__profile_sourced" ]; then
+  . "$HOME/.local/bin/env"
+  export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  . "$HOME/.cargo/env"
+  export BUN_INSTALL="$HOME/.bun"
+  export PATH="$BUN_INSTALL/bin:$PATH"
+  export PATH="$HOME/.opencode/bin:$PATH"
+fi
 
 export PYTHONWARNINGS="ignore"
 alias s3='aws --no-verify-ssl s3'
-
-. "$HOME/.cargo/env"
-
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-
-# opencode
-export PATH=/home/toby/.opencode/bin:$PATH
 
 mmdc() {
   awk '/^```mermaid/{p=1; next} p && /^```/{exit} p' "$1" | xclip -selection clipboard
