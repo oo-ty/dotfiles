@@ -11,6 +11,10 @@ if [ -z "$__profile_sourced" ]; then
   export PATH="$HOME/.opencode/bin:$PATH"
 fi
 
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+
 export PYTHONWARNINGS="ignore"
 alias s3='aws --no-verify-ssl s3'
 
@@ -38,3 +42,9 @@ paste-img() {
 }
 
 alias v=nvim
+
+# Append to the history file, don't overwrite it
+shopt -s histappend
+
+# Save and reload history after every command
+export PROMPT_COMMAND="history -a; history -n; $PROMPT_COMMAND"
